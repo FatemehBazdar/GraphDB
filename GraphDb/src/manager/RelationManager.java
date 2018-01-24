@@ -1,19 +1,20 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import dataStructure.DBType;
-import dataStructure.Node;
 import dataStructure.Relation;
-import parsing.ds.ParsingNode;
 import parsing.ds.ParsingRelation;
 
 public class RelationManager extends ArrayList<Relation> {
-	private RelationManager() {
+	private static RelationManager instance = new RelationManager();
+
+	public static RelationManager getInstance() {
+		return instance;
 	}
 
-	private static RelationManager instance = new RelationManager();
+	private RelationManager() {
+	}
 
 	@Override
 	public boolean add(Relation r) {
@@ -26,7 +27,6 @@ public class RelationManager extends ArrayList<Relation> {
 	}
 
 	public ArrayList<DBType> match(ParsingRelation pn) {
-		// TODO Auto-generated method stub
 		ArrayList<DBType> ans = new ArrayList();
 
 		for (Relation n : this) {
@@ -35,9 +35,5 @@ public class RelationManager extends ArrayList<Relation> {
 		}
 
 		return ans;
-	}
-
-	public static RelationManager getInstance() {
-		return instance;
 	}
 }

@@ -114,7 +114,8 @@ public class Main {
 	/*
 	 * Run multiple queries.
 	 * 
-	 * First Create the people from last example with more properties. Notice how a is used multiple places.
+	 * First Create the people from last example with more properties. Notice how a
+	 * is used multiple places.
 	 * 
 	 * CREATE(a: Person {name: "Bandal", age: "kheili")-[:Relation {met: "4 years",
 	 * kind: "classmate"}-> (b: Person {name: "Bazdar"}), (a {term:"9") RETURN
@@ -133,7 +134,6 @@ public class Main {
 	static String test = complex3;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		ProgramLexer pl = new ProgramLexer(new ANTLRInputStream(test));
 		CommonTokenStream cts = new CommonTokenStream(pl);
 		ProgramParser pp = new ProgramParser(cts);

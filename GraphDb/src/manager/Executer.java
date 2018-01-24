@@ -32,19 +32,6 @@ public class Executer {
 		this.p = p;
 	}
 
-	public void exec() {
-		System.out.println("***********DEBUG BEGIN************");
-		System.out.println(p);
-		System.out.println("************DEBUG END*************");
-		if (p instanceof ParsingCreate) {
-			c = (ParsingCreate) p;
-			create();
-		} else if (p instanceof ParsingMatch) {
-			m = (ParsingMatch) p;
-			match();
-		}
-	}
-
 	private void c_Return(ParsingReturnPart var) {
 		if (var.getProperty() == null) {
 			// Doesn't have property
@@ -69,30 +56,32 @@ public class Executer {
 		}
 	}
 
-	private void m_Return(ParsingReturnPart var) {
-		// TODO
-		if (var.getProperty() == null) {
-			// Doesn't have property
-			if (posibilities.get(var.getObj()) != null) {
-				System.out.println(var.getObj() + ": " + posibilities.get(var.getObj()));
-			} else {
-				System.out.println(var.getObj() + ": NOT FOUND");
-			}
-		} else {
-			// Has Property
-			if (posibilities.get(var.getObj()) != null) {
-				for (DBType dbt : posibilities.get(var.getObj())) {
+	private void create() {
+		// Add nodes
+		for (Parsing p : c.getLeftHand()) {
+			if (p instanceof ParsingNode) {
+				ParsingNode pn = (ParsingNode) p;
+				create_node(pn);
 
-					if (dbt.getProperties().containsKey(var.getProperty())) {
-						System.out.println(var.getObj() + "." + var.getProperty() + ": "
-								+ dbt.getProperties().get(var.getProperty()));
-					} else {
-						System.out.println(var.getObj() + "." + var.getProperty() + ": NOT FOUND");
-					}
-				}
-			} else {
-				System.out.println(var.getObj() + ": NOT FOUND");
+			} else if (p instanceof ParsingRelation) {
+
+				ParsingRelation pr = (ParsingRelation) p;
+
+				Relation r = new Relation(pr);
+				r.setStart(create_node(pr.getStart()));
+				r.setEnd(create_node(pr.getEnd()));
+				relationManager.add(r);
+				if (!pr.getVariable().isEmpty())
+					variables.put(pr.getVariable(), r);
+				if (!pr.getStart().getVariable().isEmpty())
+					variables.put(pr.getStart().getVariable(), r.getStart());
+				if (!pr.getEnd().getVariable().isEmpty())
+					variables.put(pr.getEnd().getVariable(), r.getEnd());
 			}
+		}
+
+		for (ParsingReturnPart prp : c.getReturn()) {
+			c_Return(prp);
 		}
 	}
 
@@ -126,50 +115,42 @@ public class Executer {
 
 	}
 
-	private void create() {
-		// Add nodes
-		for (Parsing p : c.getLeftHand()) {
-			if (p instanceof ParsingNode) {
-				ParsingNode pn = (ParsingNode) p;
-				create_node(pn);
-
-			} else if (p instanceof ParsingRelation) {
-
-				ParsingRelation pr = (ParsingRelation) p;
-
-				Relation r = new Relation(pr);
-				r.setStart(create_node(pr.getStart()));
-				r.setEnd(create_node(pr.getEnd()));
-				relationManager.add(r);
-				if (!pr.getVariable().isEmpty())
-					variables.put(pr.getVariable(), r);
-				if (!pr.getStart().getVariable().isEmpty())
-					variables.put(pr.getStart().getVariable(), r.getStart());
-				if (!pr.getEnd().getVariable().isEmpty())
-					variables.put(pr.getEnd().getVariable(), r.getEnd());
-			}
-		}
-
-		for (ParsingReturnPart prp : c.getReturn()) {
-			c_Return(prp);
+	public void exec() {
+		System.out.println("***********DEBUG BEGIN************");
+		System.out.println(p);
+		System.out.println("************DEBUG END*************");
+		if (p instanceof ParsingCreate) {
+			c = (ParsingCreate) p;
+			create();
+		} else if (p instanceof ParsingMatch) {
+			m = (ParsingMatch) p;
+			match();
 		}
 	}
 
-	private ArrayList<DBType> node_match(ParsingNode pn) {
+	private void m_Return(ParsingReturnPart var) {
+		if (var.getProperty() == null) {
+			// Doesn't have property
+			if (posibilities.get(var.getObj()) != null) {
+				System.out.println(var.getObj() + ": " + posibilities.get(var.getObj()));
+			} else {
+				System.out.println(var.getObj() + ": NOT FOUND");
+			}
+		} else {
+			// Has Property
+			if (posibilities.get(var.getObj()) != null) {
+				for (DBType dbt : posibilities.get(var.getObj())) {
 
-		if (posibilities.containsKey(pn.getVariable())) {
-			ArrayList<DBType> ans = new ArrayList();
-			for (DBType dbt : posibilities.get(pn.getVariable())) {
-				if (dbt instanceof Node) {
-					Node n = (Node) dbt;
-					if (n.compatible(pn)) {
-						ans.add(n);
+					if (dbt.getProperties().containsKey(var.getProperty())) {
+						System.out.println(var.getObj() + "." + var.getProperty() + ": "
+								+ dbt.getProperties().get(var.getProperty()));
+					} else {
+						System.out.println(var.getObj() + "." + var.getProperty() + ": NOT FOUND");
 					}
 				}
+			} else {
+				System.out.println(var.getObj() + ": NOT FOUND");
 			}
-			return ans;
-		} else {
-			return nodeManager.match(pn);
 		}
 	}
 
@@ -208,7 +189,7 @@ public class Executer {
 				// Match right
 				ArrayList<DBType> end = node_match(pr.getEnd());
 
-				// TODO Cross reference with variables
+				// Cross reference with variables
 				ArrayList<DBType> ans_rel = new ArrayList();
 				ArrayList<DBType> ans_start = new ArrayList();
 				ArrayList<DBType> ans_end = new ArrayList();
@@ -236,6 +217,24 @@ public class Executer {
 		// Parse return
 		for (ParsingReturnPart prp : m.getReturn()) {
 			m_Return(prp);
+		}
+	}
+
+	private ArrayList<DBType> node_match(ParsingNode pn) {
+
+		if (posibilities.containsKey(pn.getVariable())) {
+			ArrayList<DBType> ans = new ArrayList();
+			for (DBType dbt : posibilities.get(pn.getVariable())) {
+				if (dbt instanceof Node) {
+					Node n = (Node) dbt;
+					if (n.compatible(pn)) {
+						ans.add(n);
+					}
+				}
+			}
+			return ans;
+		} else {
+			return nodeManager.match(pn);
 		}
 	}
 

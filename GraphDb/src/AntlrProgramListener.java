@@ -17,117 +17,7 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	Stack<Object> data = new Stack<>();
 
 	@Override
-	public void exitNode_props(ProgramParser.Node_propsContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitNode_props(ctx);
-
-		String val = (String) data.pop();
-		String name = (String) data.pop();
-
-		data.push(new ParsingProps(name, val));
-	}
-
-	@Override
-	public void enterProps(ProgramParser.PropsContext ctx) {
-		// TODO Auto-generated method stub
-		super.enterProps(ctx);
-
-		data.push("#");
-	}
-
-	@Override
-	public void exitProps(ProgramParser.PropsContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitProps(ctx);
-
-		Object obj = data.pop();
-
-		ParsingProperty pp = new ParsingProperty();
-
-		while (obj != "#") {
-			pp.add((ParsingProps) obj);
-			obj = data.pop();
-		}
-
-		data.push(pp);
-
-	}
-
-	@Override
-	public void exitString(ProgramParser.StringContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitString(ctx);
-
-		String str = ctx.getText();
-
-		data.push(str);
-	}
-
-	@Override
-	public void enterReturnStatement(ProgramParser.ReturnStatementContext ctx) {
-		// TODO Auto-generated method stub
-		super.enterReturnStatement(ctx);
-		data.push(".RETURN.");
-	}
-
-	@Override
-	public void exitReturnStatement(ProgramParser.ReturnStatementContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitReturnStatement(ctx);
-
-		ParsingReturn pr = new ParsingReturn();
-
-		Object obj = data.pop();
-
-		while (obj.toString() != ".RETURN.") {
-			try {
-				pr.add((ParsingReturnPart) obj);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-
-			obj = data.pop();
-		}
-		// TODO
-
-		data.push(pr);
-
-	}
-
-	@Override
-	public void enterLeftHand(ProgramParser.LeftHandContext ctx) {
-		// TODO Auto-generated method stub
-		super.enterLeftHand(ctx);
-		data.push("LEFT_HAND");
-	}
-
-	@Override
-	public void exitLeftHand(ProgramParser.LeftHandContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitLeftHand(ctx);
-
-		ParsingLeftHand plh = new ParsingLeftHand();
-
-		Object obj = data.pop();
-
-		while (obj.toString() != "LEFT_HAND") {
-			try {
-				plh.add((Parsing) obj);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-
-			obj = data.pop();
-		}
-		// TODO
-
-		data.push(plh);
-
-	}
-
-	@Override
 	public void enterCreate(ProgramParser.CreateContext ctx) {
-		// TODO Auto-generated method stub
 		super.enterCreate(ctx);
 
 		data.push("#");
@@ -135,27 +25,33 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	}
 
 	@Override
-	public void exitMatch(ProgramParser.MatchContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitMatch(ctx);
+	public void enterLeftHand(ProgramParser.LeftHandContext ctx) {
+		super.enterLeftHand(ctx);
+		data.push("LEFT_HAND");
+	}
 
-		try {
+	@Override
+	public void enterProperty_variable(ProgramParser.Property_variableContext ctx) {
+		super.enterProperty_variable(ctx);
 
-			ParsingReturn pr = (ParsingReturn) data.pop();
-			ParsingLeftHand plh = (ParsingLeftHand) data.pop();
+		data.push("#");
+	}
 
-			ParsingMatch pm = new ParsingMatch(plh, pr);
-			data.push(pm);
+	@Override
+	public void enterProps(ProgramParser.PropsContext ctx) {
+		super.enterProps(ctx);
 
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+		data.push("#");
+	}
 
+	@Override
+	public void enterReturnStatement(ProgramParser.ReturnStatementContext ctx) {
+		super.enterReturnStatement(ctx);
+		data.push(".RETURN.");
 	}
 
 	@Override
 	public void exitCreate(ProgramParser.CreateContext ctx) {
-		// TODO Auto-generated method stub
 		super.exitCreate(ctx);
 
 		try {
@@ -183,43 +79,65 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	}
 
 	@Override
-	public void exitRelation_right(ProgramParser.Relation_rightContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitRelation_right(ctx);
-		try {
-			ParsingNode end = (ParsingNode) data.pop();
-			ParsingProperty pp = (ParsingProperty) data.pop();
-			String type = (String) data.pop();
-			String variable = (String) data.pop();
-			ParsingNode start = (ParsingNode) data.pop();
-			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
-			data.push(pr);
-		} catch (Exception e) {
-			System.out.println(e);
+	public void exitLeftHand(ProgramParser.LeftHandContext ctx) {
+		super.exitLeftHand(ctx);
+
+		ParsingLeftHand plh = new ParsingLeftHand();
+
+		Object obj = data.pop();
+
+		while (obj.toString() != "LEFT_HAND") {
+			try {
+				plh.add((Parsing) obj);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+			obj = data.pop();
 		}
+
+		data.push(plh);
+
 	}
 
 	@Override
-	public void exitRelation_left(ProgramParser.Relation_leftContext ctx) {
-		// TODO Auto-generated method stub
-		super.exitRelation_left(ctx);
+	public void exitMatch(ProgramParser.MatchContext ctx) {
+		super.exitMatch(ctx);
+
 		try {
-			ParsingNode start = (ParsingNode) data.pop();
-			ParsingProperty pp = (ParsingProperty) data.pop();
-			String type = (String) data.pop();
-			String variable = (String) data.pop();
-			ParsingNode end = (ParsingNode) data.pop();
-			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
-			data.push(pr);
+
+			ParsingReturn pr = (ParsingReturn) data.pop();
+			ParsingLeftHand plh = (ParsingLeftHand) data.pop();
+
+			ParsingMatch pm = new ParsingMatch(plh, pr);
+			data.push(pm);
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+
 	}
 
 	@Override
-	public void exitNode_variable(ProgramParser.Node_variableContext ctx) {
-		super.exitNode_variable(ctx);
-		data.push(ctx.getText());
+	public void exitNode(ProgramParser.NodeContext ctx) {
+		super.exitNode(ctx);
+
+		ParsingProperty pp = (ParsingProperty) data.pop();
+		String type = (String) data.pop();
+		String variable = (String) data.pop();
+
+		ParsingNode pn = new ParsingNode(type, variable, pp);
+		data.push(pn);
+	}
+
+	@Override
+	public void exitNode_props(ProgramParser.Node_propsContext ctx) {
+		super.exitNode_props(ctx);
+
+		String val = (String) data.pop();
+		String name = (String) data.pop();
+
+		data.push(new ParsingProps(name, val));
 	}
 
 	@Override
@@ -235,17 +153,11 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	}
 
 	@Override
-	public void exitNode(ProgramParser.NodeContext ctx) {
-		super.exitNode(ctx);
-
-		ParsingProperty pp = (ParsingProperty) data.pop();
-		String type = (String) data.pop();
-		String variable = (String) data.pop();
-
-		ParsingNode pn = new ParsingNode(type, variable, pp);
-		data.push(pn);
+	public void exitNode_variable(ProgramParser.Node_variableContext ctx) {
+		super.exitNode_variable(ctx);
+		data.push(ctx.getText());
 	}
-	
+
 	@Override
 	public void exitProgram_(ProgramParser.Program_Context ctx) {
 		super.exitProgram_(ctx);
@@ -258,16 +170,7 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	}
 
 	@Override
-	public void enterProperty_variable(ProgramParser.Property_variableContext ctx) {
-		// TODO Auto-generated method stub
-		super.enterProperty_variable(ctx);
-
-		data.push("#");
-	}
-
-	@Override
 	public void exitProperty_variable(ProgramParser.Property_variableContext ctx) {
-		// TODO Auto-generated method stub
 		super.exitProperty_variable(ctx);
 
 		String p1 = (String) data.pop();
@@ -289,11 +192,90 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	}
 
 	@Override
+	public void exitProps(ProgramParser.PropsContext ctx) {
+		super.exitProps(ctx);
+
+		Object obj = data.pop();
+
+		ParsingProperty pp = new ParsingProperty();
+
+		while (obj != "#") {
+			pp.add((ParsingProps) obj);
+			obj = data.pop();
+		}
+
+		data.push(pp);
+
+	}
+
+	@Override
 	public void exitPvariable(ProgramParser.PvariableContext ctx) {
-		// TODO Auto-generated method stub
 		super.exitPvariable(ctx);
 
 		data.push(ctx.getText());
+	}
+
+	@Override
+	public void exitRelation_left(ProgramParser.Relation_leftContext ctx) {
+		super.exitRelation_left(ctx);
+		try {
+			ParsingNode start = (ParsingNode) data.pop();
+			ParsingProperty pp = (ParsingProperty) data.pop();
+			String type = (String) data.pop();
+			String variable = (String) data.pop();
+			ParsingNode end = (ParsingNode) data.pop();
+			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
+			data.push(pr);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	@Override
+	public void exitRelation_right(ProgramParser.Relation_rightContext ctx) {
+		super.exitRelation_right(ctx);
+		try {
+			ParsingNode end = (ParsingNode) data.pop();
+			ParsingProperty pp = (ParsingProperty) data.pop();
+			String type = (String) data.pop();
+			String variable = (String) data.pop();
+			ParsingNode start = (ParsingNode) data.pop();
+			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
+			data.push(pr);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	@Override
+	public void exitReturnStatement(ProgramParser.ReturnStatementContext ctx) {
+		super.exitReturnStatement(ctx);
+
+		ParsingReturn pr = new ParsingReturn();
+
+		Object obj = data.pop();
+
+		while (obj.toString() != ".RETURN.") {
+			try {
+				pr.add((ParsingReturnPart) obj);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+			obj = data.pop();
+		}
+
+		data.push(pr);
+
+	}
+
+	@Override
+	public void exitString(ProgramParser.StringContext ctx) {
+		super.exitString(ctx);
+
+		String str = ctx.getText();
+
+		data.push(str);
 	}
 
 }

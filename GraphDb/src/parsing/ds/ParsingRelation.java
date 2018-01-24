@@ -6,8 +6,12 @@ public class ParsingRelation implements Parsing {
 	ParsingProperty properties;
 	String variable;
 
-	public ParsingNode getStart() {
-		return start;
+	public ParsingRelation(ParsingNode start, ParsingNode end, ParsingProperty property, String type, String variable) {
+		this.start = start;
+		this.end = end;
+		this.properties = property;
+		this.type = type;
+		this.variable = variable;
 	}
 
 	public ParsingNode getEnd() {
@@ -18,6 +22,10 @@ public class ParsingRelation implements Parsing {
 		return properties;
 	}
 
+	public ParsingNode getStart() {
+		return start;
+	}
+
 	public String getType() {
 		return type;
 	}
@@ -26,17 +34,8 @@ public class ParsingRelation implements Parsing {
 		return variable;
 	}
 
-	public ParsingRelation(ParsingNode start, ParsingNode end, ParsingProperty property, String type, String variable) {
-		this.start = start;
-		this.end = end;
-		this.properties = property;
-		this.type = type;
-		this.variable = variable;
-	}
-
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "Relation from " + start.toString() + " to " + end.toString() + " with type " + type + " and variable "
 				+ variable + " and properties: " + this.properties;
 	}

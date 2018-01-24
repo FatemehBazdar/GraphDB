@@ -1,17 +1,10 @@
 package dataStructure;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import parsing.ds.ParsingNode;
 import parsing.ds.ParsingProps;
 
 public class Node extends DBType {
 	private String type;
-
-	public String getType() {
-		return type;
-	}
 
 	public Node(ParsingNode pn) {
 		this.type = pn.getType();
@@ -30,9 +23,12 @@ public class Node extends DBType {
 		return true;
 	}
 
+	public String getType() {
+		return type;
+	}
+
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		String tmp = "";
 		if (!this.type.isEmpty()) {
 			tmp = ":" + this.type;

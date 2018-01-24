@@ -1,8 +1,5 @@
 package dataStructure;
 
-import java.util.LinkedList;
-
-import parsing.ds.ParsingNode;
 import parsing.ds.ParsingProps;
 import parsing.ds.ParsingRelation;
 
@@ -19,28 +16,6 @@ public class Relation extends DBType {
 		this.type = pr.getType();
 		this.properties = new Property(pr.getProperty());
 	}
-	
-	public void setEnd(Node end) {
-		this.end = end;
-	}
-	
-	public void setStart(Node start) {
-		this.start = start;
-	}
-
-	public Node getStart() {
-		return start;
-	}
-
-	public Node getEnd() {
-		return end;
-	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "Relation from " + start + " to " + end + " with property " + this.properties;
-	}
 
 	public boolean compatible(ParsingRelation pr) {
 		if (!pr.getType().isEmpty() && !type.equals(pr.getType()))
@@ -51,8 +26,29 @@ public class Relation extends DBType {
 			if (!p.containsKey(prp.getName()) || !p.get(prp.getName()).equals(prp.getVal()))
 				return false;
 		}
-		
+
 		return start.compatible(pr.getStart()) && end.compatible(pr.getEnd());
+	}
+
+	public Node getEnd() {
+		return end;
+	}
+
+	public Node getStart() {
+		return start;
+	}
+
+	public void setEnd(Node end) {
+		this.end = end;
+	}
+
+	public void setStart(Node start) {
+		this.start = start;
+	}
+
+	@Override
+	public String toString() {
+		return "Relation from " + start + " to " + end + " with property " + this.properties;
 	}
 
 }
