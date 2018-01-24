@@ -8,6 +8,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ProgramListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link ProgramParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void enterString(@NotNull ProgramParser.StringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProgramParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void exitString(@NotNull ProgramParser.StringContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProgramParser#node_relation}.
 	 * @param ctx the parse tree
 	 */
@@ -68,6 +78,16 @@ public interface ProgramListener extends ParseTreeListener {
 	 */
 	void exitType(@NotNull ProgramParser.TypeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProgramParser#props}.
+	 * @param ctx the parse tree
+	 */
+	void enterProps(@NotNull ProgramParser.PropsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProgramParser#props}.
+	 * @param ctx the parse tree
+	 */
+	void exitProps(@NotNull ProgramParser.PropsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProgramParser#relation}.
 	 * @param ctx the parse tree
 	 */
@@ -97,6 +117,16 @@ public interface ProgramListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNode(@NotNull ProgramParser.NodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProgramParser#node_props}.
+	 * @param ctx the parse tree
+	 */
+	void enterNode_props(@NotNull ProgramParser.Node_propsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProgramParser#node_props}.
+	 * @param ctx the parse tree
+	 */
+	void exitNode_props(@NotNull ProgramParser.Node_propsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProgramParser#relation_right}.
 	 * @param ctx the parse tree

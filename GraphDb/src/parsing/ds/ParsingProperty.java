@@ -1,7 +1,13 @@
 package parsing.ds;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-public class ParsingProperty extends HashMap<String, Object>{
+public class ParsingProperty extends ArrayList<ParsingProps>{
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString().replaceAll("^\\[", "{").replaceAll("\\]$","}");
+	}
+	
 }

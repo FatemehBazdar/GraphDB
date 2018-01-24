@@ -10,8 +10,9 @@ public class Main {
 	static String test_create_return = "CREATE (a)-[c:b]->(d) RETURN a";
 	static String test_match = "MATCH (a) RETURN a";
 	static String test_match_prp = "MATCH (a) RETURN a.b";
+	static String test_property = "CREATE (a: Person {name: \"Bandal\"})";
 			
-	static String test = test_create_return;
+	static String test = test_property;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

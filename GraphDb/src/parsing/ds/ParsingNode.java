@@ -27,7 +27,7 @@ public class ParsingNode implements Parsing{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Node of type: " + type + " with variable " + variable;
+		return "Node of type: " + type + " with variable " + variable + " and properties: " + this.properties;
 	}
 	
 }

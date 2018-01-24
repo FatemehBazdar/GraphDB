@@ -5,6 +5,8 @@ import parsing.ds.ParsingCreate;
 import parsing.ds.ParsingLeftHand;
 import parsing.ds.ParsingMatch;
 import parsing.ds.ParsingNode;
+import parsing.ds.ParsingProperty;
+import parsing.ds.ParsingProps;
 import parsing.ds.ParsingRelation;
 import parsing.ds.ParsingReturn;
 import parsing.ds.ParsingReturnPart;
@@ -13,6 +15,53 @@ public class AntlrProgramListener extends ProgramBaseListener {
 
 	Stack<Object> data = new Stack<>();
 
+	@Override
+	public void exitNode_props(ProgramParser.Node_propsContext ctx) {
+		// TODO Auto-generated method stub
+		super.exitNode_props(ctx);
+
+		String val = (String)data.pop();
+		String name = (String)data.pop();
+		
+		data.push(new ParsingProps(name, val));
+	}
+	
+	@Override
+	public void enterProps(ProgramParser.PropsContext ctx) {
+		// TODO Auto-generated method stub
+		super.enterProps(ctx);
+		
+		data.push("#");
+	}
+	
+	@Override
+	public void exitProps(ProgramParser.PropsContext ctx) {
+		// TODO Auto-generated method stub
+		super.exitProps(ctx);
+		
+		Object obj = data.pop();
+		
+		ParsingProperty pp = new ParsingProperty();
+		
+		while(obj != "#") {
+			pp.add((ParsingProps)obj);
+			obj = data.pop();
+		}
+		
+		data.push(pp);
+		
+	}
+	
+	@Override
+	public void exitString(ProgramParser.StringContext ctx) {
+		// TODO Auto-generated method stub
+		super.exitString(ctx);
+
+		String str = ctx.getText();
+		
+		data.push(str);
+	}
+	
 	@Override
 	public void enterReturnStatement(ProgramParser.ReturnStatementContext ctx) {
 		// TODO Auto-generated method stub
@@ -140,10 +189,11 @@ public class AntlrProgramListener extends ProgramBaseListener {
 		super.exitRelation_right(ctx);
 		try {
 			ParsingNode end = (ParsingNode) data.pop();
+			ParsingProperty pp = (ParsingProperty)data.pop();
 			String type = (String) data.pop();
 			String variable = (String) data.pop();
 			ParsingNode start = (ParsingNode) data.pop();
-			ParsingRelation pr = new ParsingRelation(start, end, null, type, variable);
+			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
 			data.push(pr);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -156,10 +206,11 @@ public class AntlrProgramListener extends ProgramBaseListener {
 		super.exitRelation_left(ctx);
 		try {
 			ParsingNode start = (ParsingNode) data.pop();
+			ParsingProperty pp = (ParsingProperty)data.pop();
 			String type = (String) data.pop();
 			String variable = (String) data.pop();
 			ParsingNode end = (ParsingNode) data.pop();
-			ParsingRelation pr = new ParsingRelation(start, end, null, type, variable);
+			ParsingRelation pr = new ParsingRelation(start, end, pp, type, variable);
 			data.push(pr);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -188,10 +239,11 @@ public class AntlrProgramListener extends ProgramBaseListener {
 	public void exitNode(ProgramParser.NodeContext ctx) {
 		super.exitNode(ctx);
 
+		ParsingProperty pp = (ParsingProperty)data.pop();
 		String type = (String) data.pop();
 		String variable = (String) data.pop();
 
-		ParsingNode pn = new ParsingNode(type, variable, null);
+		ParsingNode pn = new ParsingNode(type, variable, pp);
 		data.push(pn);
 	}
 
