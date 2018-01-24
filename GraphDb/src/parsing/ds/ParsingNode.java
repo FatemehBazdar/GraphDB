@@ -1,8 +1,6 @@
 package parsing.ds;
 
-import dataStructure.Property;
-
-public class ParsingNode {
+public class ParsingNode implements Parsing{
 	private String type;
 	private String variable;
 	private ParsingProperty properties;

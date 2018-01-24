@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ProgramLexer pl= new ProgramLexer(new ANTLRInputStream("CREATE (a)<-[c : fgb]-(b)")) ;
+		ProgramLexer pl= new ProgramLexer(new ANTLRInputStream("CREATE (a)<-[c : fgb]-(b), (a)")) ;
 		CommonTokenStream cts = new CommonTokenStream(pl);
 		ProgramParser pp = new ProgramParser(cts);
 		

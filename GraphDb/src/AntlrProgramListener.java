@@ -1,8 +1,7 @@
-import java.util.ArrayList;
 import java.util.Stack;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-
+import parsing.ds.Parsing;
+import parsing.ds.ParsingCreate;
 import parsing.ds.ParsingNode;
 import parsing.ds.ParsingRelation;
 
@@ -10,7 +9,36 @@ public class AntlrProgramListener extends ProgramBaseListener {
 
 	Stack<Object> data = new Stack<>();
 
-	
+	@Override
+	public void enterCreate(ProgramParser.CreateContext ctx) {
+		// TODO Auto-generated method stub
+		super.enterCreate(ctx);
+		data.push("CREATE");
+	}
+
+	@Override
+	public void exitCreate(ProgramParser.CreateContext ctx) {
+		// TODO Auto-generated method stub
+		super.exitCreate(ctx);
+
+		ParsingCreate pc = new ParsingCreate();
+
+		Object obj = data.pop();
+
+		while (obj.toString() != "CREATE") {
+			try {
+				pc.add((Parsing) obj);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+
+			obj = data.pop();
+		}
+		// TODO
+		data.push(pc);
+
+	}
+
 	@Override
 	public void exitRelation_right(ProgramParser.Relation_rightContext ctx) {
 		// TODO Auto-generated method stub
@@ -42,7 +70,7 @@ public class AntlrProgramListener extends ProgramBaseListener {
 			System.out.println(e);
 		}
 	}
-	
+
 	@Override
 	public void exitNode_variable(ProgramParser.Node_variableContext ctx) {
 		super.exitNode_variable(ctx);
@@ -71,14 +99,12 @@ public class AntlrProgramListener extends ProgramBaseListener {
 		ParsingNode pn = new ParsingNode(type, variable, null);
 		data.push(pn);
 	}
-	
+
 	@Override
 	public void exitProgram(ProgramParser.ProgramContext ctx) {
 		super.exitProgram(ctx);
-		
+
 		System.out.println(data.pop());
 	}
-	
-	
-	
+
 }

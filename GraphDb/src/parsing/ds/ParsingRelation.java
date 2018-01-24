@@ -1,6 +1,6 @@
 package parsing.ds;
 
-public class ParsingRelation {
+public class ParsingRelation implements Parsing {
 	ParsingNode start, end;
 	String type;
 	ParsingProperty property;
