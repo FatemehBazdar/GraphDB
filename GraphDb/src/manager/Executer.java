@@ -103,7 +103,8 @@ public class Executer {
 
 				Node n = new Node(pn);
 				nodeManager.add(n);
-				variables.put(pn.getVariable(), n);
+				if (!pn.getVariable().isEmpty())
+					variables.put(pn.getVariable(), n);
 
 			} else if (p instanceof ParsingRelation) {
 
@@ -111,9 +112,12 @@ public class Executer {
 
 				Relation r = new Relation(pr);
 				relationManager.add(r);
-				variables.put(pr.getVariable(), r);
-				variables.put(pr.getStart().getVariable(), r.getStart());
-				variables.put(pr.getEnd().getVariable(), r.getEnd());
+				if (!pr.getVariable().isEmpty())
+					variables.put(pr.getVariable(), r);
+				if (!pr.getStart().getVariable().isEmpty())
+					variables.put(pr.getStart().getVariable(), r.getStart());
+				if (!pr.getEnd().getVariable().isEmpty())
+					variables.put(pr.getEnd().getVariable(), r.getEnd());
 			}
 		}
 
