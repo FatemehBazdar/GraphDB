@@ -19,6 +19,14 @@ public class Relation extends DBType {
 		this.type = pr.getType();
 		this.properties = new Property(pr.getProperty());
 	}
+	
+	public void setEnd(Node end) {
+		this.end = end;
+	}
+	
+	public void setStart(Node start) {
+		this.start = start;
+	}
 
 	public Node getStart() {
 		return start;

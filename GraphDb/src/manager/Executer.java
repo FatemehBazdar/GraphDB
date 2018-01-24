@@ -12,6 +12,7 @@ import parsing.ds.Parsing;
 import parsing.ds.ParsingCreate;
 import parsing.ds.ParsingMatch;
 import parsing.ds.ParsingNode;
+import parsing.ds.ParsingProps;
 import parsing.ds.ParsingRelation;
 import parsing.ds.ParsingReturnPart;
 
@@ -95,22 +96,50 @@ public class Executer {
 		}
 	}
 
+	private Node create_node(ParsingNode pn) {
+
+		if (!pn.getVariable().isEmpty() && variables.containsKey(pn.getVariable())) {
+
+			if (!(variables.get(pn.getVariable()) instanceof Node))
+				throw new Error("The variables " + pn.getVariable() + "is used for both Node and Relation");
+
+			Node n = (Node) variables.get(pn.getVariable());
+
+			if (!n.getType().isEmpty() && !pn.getType().isEmpty() && !pn.getType().equals(n.getType()))
+				throw new Error("The variable " + pn.getVariable() + " can not contain more than one type");
+
+			for (ParsingProps pp : pn.getProperties())
+				n.getProperties().put(pp.getName(), pp.getVal());
+
+			return n;
+
+		} else {
+
+			Node n = new Node(pn);
+			nodeManager.add(n);
+			if (!pn.getVariable().isEmpty())
+				variables.put(pn.getVariable(), n);
+
+			return n;
+
+		}
+
+	}
+
 	private void create() {
 		// Add nodes
 		for (Parsing p : c.getLeftHand()) {
 			if (p instanceof ParsingNode) {
 				ParsingNode pn = (ParsingNode) p;
-
-				Node n = new Node(pn);
-				nodeManager.add(n);
-				if (!pn.getVariable().isEmpty())
-					variables.put(pn.getVariable(), n);
+				create_node(pn);
 
 			} else if (p instanceof ParsingRelation) {
 
 				ParsingRelation pr = (ParsingRelation) p;
 
 				Relation r = new Relation(pr);
+				r.setStart(create_node(pr.getStart()));
+				r.setEnd(create_node(pr.getEnd()));
 				relationManager.add(r);
 				if (!pr.getVariable().isEmpty())
 					variables.put(pr.getVariable(), r);

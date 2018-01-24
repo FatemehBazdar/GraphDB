@@ -18,8 +18,9 @@ public class RelationManager extends ArrayList<Relation> {
 	@Override
 	public boolean add(Relation r) {
 
-		NodeManager.getInstance().add(r.getStart());
-		NodeManager.getInstance().add(r.getEnd());
+		// Doing this in Executer now.
+		// NodeManager.getInstance().add(r.getStart());
+		// NodeManager.getInstance().add(r.getEnd());
 		return super.add(r);
 
 	}
