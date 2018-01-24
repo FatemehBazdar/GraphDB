@@ -3,18 +3,21 @@ package parsing.ds;
 import java.util.ArrayList;
 
 public class ParsingCreate {
-	private ArrayList<Parsing> list = new ArrayList<>();
+	private ParsingLeftHand plh;
+	private ParsingReturn pr;
 	
-	public void add(Parsing p) {
-		this.list.add(p);
+	public ParsingCreate(ParsingLeftHand plh, ParsingReturn pr) {
+		this.plh = plh;
+		this.pr = pr;
+	}
+	
+	public void setLeftHand(ParsingLeftHand plh) {
+		this.plh = plh;
 	}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		String list = "";
-		for (Parsing p: this.list)
-			list += "* " + p.toString() + "\n";
-		return "Creating List:\n" + list;
+		return "Creating List:\n" + plh.toString() + "\nReturning: \n"+ pr.toString();
 	}
 }
