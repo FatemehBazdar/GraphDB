@@ -3,29 +3,40 @@ package manager;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import dataStructure.DBType;
+import dataStructure.Node;
 import dataStructure.Relation;
+import parsing.ds.ParsingNode;
+import parsing.ds.ParsingRelation;
 
-public class RelationManager {
+public class RelationManager extends ArrayList<Relation> {
 	private RelationManager() {
 	}
 
 	private static RelationManager instance = new RelationManager();
 
-	public static RelationManager getInstance() {
-		return instance;
+	@Override
+	public boolean add(Relation r) {
+
+		NodeManager.getInstance().add(r.getStart());
+		NodeManager.getInstance().add(r.getEnd());
+		return super.add(r);
+
 	}
 
-	ArrayList<Relation> relations = new ArrayList();
-	
-	void add() {
-		// TODO
+	public ArrayList<DBType> match(ParsingRelation pn) {
+		// TODO Auto-generated method stub
+		ArrayList<DBType> ans = new ArrayList();
+
+		for (Relation n : this) {
+			if (n.compatible(pn))
+				ans.add(n);
+		}
+
+		return ans;
 	}
-	
-	void get(int i) {
-		// TODO
-	}
-	
-	void delete(int i) {
-		// TODO
+
+	public static RelationManager getInstance() {
+		return instance;
 	}
 }

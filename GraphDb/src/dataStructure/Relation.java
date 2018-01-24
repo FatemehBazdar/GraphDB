@@ -2,42 +2,49 @@ package dataStructure;
 
 import java.util.LinkedList;
 
-public class Relation {
+import parsing.ds.ParsingNode;
+import parsing.ds.ParsingProps;
+import parsing.ds.ParsingRelation;
+
+public class Relation extends DBType {
 
 	private Node start;
 	private Node end;
 
 	private String type;
-	private Property properties;
 
-	public Node getEnd() {
-		return end;
-	}
-
-	public Property getProperties() {
-		return properties;
+	public Relation(ParsingRelation pr) {
+		this.start = new Node(pr.getStart());
+		this.end = new Node(pr.getEnd());
+		this.type = pr.getType();
+		this.properties = new Property(pr.getProperty());
 	}
 
 	public Node getStart() {
 		return start;
 	}
 
-	public String getType() {
-		return type;
+	public Node getEnd() {
+		return end;
 	}
-	
-	public Relation(Node start, Node end, String type) {
-		this.start = start;
-		this.end = end;
-		this.type = type;
-		this.properties = new Property();
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Relation from " + start + " to " + end + " with property " + this.properties;
 	}
-	
-	public Relation(Node start, Node end, String type, Property p) {
-		this.start = start;
-		this.end = end;
-		this.type = type;
-		this.properties = p;
+
+	public boolean compatible(ParsingRelation pr) {
+		if (!pr.getType().isEmpty() && !type.equals(pr.getType()))
+			return false;
+
+		Property p = getProperties();
+		for (ParsingProps prp : pr.getProperty()) {
+			if (!p.containsKey(prp.getName()) || !p.get(prp.getName()).equals(prp.getVal()))
+				return false;
+		}
+		
+		return start.compatible(pr.getStart()) && end.compatible(pr.getEnd());
 	}
 
 }

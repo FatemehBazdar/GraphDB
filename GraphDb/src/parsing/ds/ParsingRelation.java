@@ -3,7 +3,7 @@ package parsing.ds;
 public class ParsingRelation implements Parsing {
 	ParsingNode start, end;
 	String type;
-	ParsingProperty property;
+	ParsingProperty properties;
 	String variable;
 
 	public ParsingNode getStart() {
@@ -15,7 +15,7 @@ public class ParsingRelation implements Parsing {
 	}
 
 	public ParsingProperty getProperty() {
-		return property;
+		return properties;
 	}
 
 	public String getType() {
@@ -29,7 +29,7 @@ public class ParsingRelation implements Parsing {
 	public ParsingRelation(ParsingNode start, ParsingNode end, ParsingProperty property, String type, String variable) {
 		this.start = start;
 		this.end = end;
-		this.property = property;
+		this.properties = property;
 		this.type = type;
 		this.variable = variable;
 	}
@@ -38,7 +38,7 @@ public class ParsingRelation implements Parsing {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Relation from " + start.toString() + " to " + end.toString() + " with type " + type + " and variable "
-				+ variable;
+				+ variable + " and properties: " + this.properties;
 	}
 
 }

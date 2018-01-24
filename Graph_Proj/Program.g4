@@ -1,7 +1,7 @@
 grammar Program;
 
-
-program: match | create ;
+program: (program_ SEMIC?)*;
+program_: match | create ;
 
 create: CREATE leftHand returnStatement?;
 match: MATCH leftHand returnStatement;
@@ -35,6 +35,7 @@ RCBRAC: '}';
 LARROW: '<-';
 RARROW: '->';
 DOT: '.';
+SEMIC: ';';
 
 type: (COL variable);
 

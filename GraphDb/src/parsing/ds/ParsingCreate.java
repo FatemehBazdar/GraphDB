@@ -2,7 +2,7 @@ package parsing.ds;
 
 import java.util.ArrayList;
 
-public class ParsingCreate {
+public class ParsingCreate implements Parser{
 	private ParsingLeftHand plh;
 	private ParsingReturn pr;
 	
@@ -11,8 +11,12 @@ public class ParsingCreate {
 		this.pr = pr;
 	}
 	
-	public void setLeftHand(ParsingLeftHand plh) {
-		this.plh = plh;
+	public ParsingLeftHand getLeftHand() {
+		return plh;
+	}
+	
+	public ParsingReturn getReturn() {
+		return pr;
 	}
 	
 	@Override

@@ -2,8 +2,16 @@ package parsing.ds;
 
 public class ParsingReturnPart {
 
-	String obj;
-	String property;
+	private String obj;
+	private String property;
+	
+	public String getObj() {
+		return obj;
+	}
+	
+	public String getProperty() {
+		return property;
+	}
 	
 	public ParsingReturnPart(String obj, String property) {
 		// TODO Auto-generated constructor stub

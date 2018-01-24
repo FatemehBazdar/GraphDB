@@ -3,36 +3,42 @@ package dataStructure;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Node {
-	private String type;
-	private Property properties;
+import parsing.ds.ParsingNode;
+import parsing.ds.ParsingProps;
 
-	public Property getProperties() {
-		return properties;
-	}
+public class Node extends DBType {
+	private String type;
 
 	public String getType() {
 		return type;
 	}
-	
-	Node(String type, Property properties){
-		this.type = type;
-		this.properties = properties;
-	}
-	
-	Node(String type){
-		this.type = type;
-		this.properties = new Property();
-	}
-	
-	Node(){
-		this.type = "";
-		this.properties = new Property();
+
+	public Node(ParsingNode pn) {
+		this.type = pn.getType();
+		this.properties = new Property(pn.getProperties());
 	}
 
-	Node(Property properties){
-		this.type = "";
-		this.properties = properties;
+	public boolean compatible(ParsingNode pn) {
+		if (!pn.getType().isEmpty() && !getType().equals(pn.getType()))
+			return false;
+
+		Property p = getProperties();
+		for (ParsingProps prp : pn.getProperties()) {
+			if (!p.containsKey(prp.getName()) || !p.get(prp.getName()).equals(prp.getVal()))
+				return false;
+		}
+		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String tmp = "";
+		if (!this.type.isEmpty()) {
+			tmp = ":" + this.type;
+		}
+
+		return "(" + tmp + this.properties + ")";
+	}
+
 }

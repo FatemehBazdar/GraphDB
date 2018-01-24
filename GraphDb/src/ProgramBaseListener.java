@@ -100,6 +100,18 @@ public class ProgramBaseListener implements ProgramListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterProgram_(@NotNull ProgramParser.Program_Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgram_(@NotNull ProgramParser.Program_Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterProps(@NotNull ProgramParser.PropsContext ctx) { }
 	/**
 	 * {@inheritDoc}
